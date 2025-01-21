@@ -149,6 +149,8 @@ await sdk.assistant.members(wxid, token);
 await sdk.assistant.scan(wxid, token, username);
 ```
 
+## Promotion
+
 ### 登录视屏好加热平台
 
 此能力具备两个功能，如果同一个用户登录请使用同一`token`，此处至关重要，请紧记。目前加热平台只能绑定一个账号，所以可以直接使用`scan`方法登录，而`members`方法可以辅助用于确认是否开通加热账号。
