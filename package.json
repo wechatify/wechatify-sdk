@@ -1,0 +1,24 @@
+{
+  "name": "wechat-platform-sdk",
+  "version": "1.0.0",
+  "description": "PJBlog since 2014-preset, new Blog for writer",
+  "private": true,
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "pub": "npm run build && git add . && git commit -am 'update' && git push",
+    "init": "pnpm i --registry=https://registry.npmmirror.com/",
+    "update": "pnpm update --registry=https://registry.npmmirror.com/",
+    "dev": "node --loader ts-node/esm src/main.ts",
+    "build": "rm -rf ./dist && tsc -d && fix-esm-import-path --preserve-import-type ./dist",
+    "start": "pm2 start dist/main.js --name=julex-center"
+  },
+  "devDependencies": {
+    "fix-esm-import-path": "^1.10.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "axios": "^1.7.9"
+  }
+}
