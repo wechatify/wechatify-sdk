@@ -1,24 +1,18 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import { NIO } from "./nio";
 import { WechatPlatformSDKProps, WechatRequestAuth, WechatRequestForGetConfigs, WechatRequestForPostConfigs, WechatRequestZip } from "./types";
 import { Exception } from "./exception";
 
-export class Request {
+export class Request extends NIO {
   private readonly app_id: string;
   private readonly app_secret: string;
   private readonly instance: AxiosInstance;
-  private readonly stacks = new Map<number, {
-    configs: AxiosRequestConfig,
-    controller: AbortController,
-    resolve: Function,
-    reject: Function,
-  }>();
 
-  private traceId = 0;
-  private loading = false;
   private access_token: string;
   private refresh_token: string;
 
   constructor(options: WechatPlatformSDKProps) {
+    super();
     this.app_id = options.app_id;
     this.app_secret = options.app_secret;
     this.instance = axios.create({
@@ -26,7 +20,27 @@ export class Request {
     })
   }
 
-  public async fetch<T = any, D = any>(configs: AxiosRequestConfig<D>) {
+  protected initable(): boolean {
+    return !this.access_token;
+  }
+
+  protected usePromise(): Promise<void> {
+    return this.refresh_token
+      ? this.refreshToken()
+      : this.auto();
+  }
+
+  protected checkErrorCode(e: Exception): boolean {
+    return e?.status === 410;
+  }
+
+  protected resolveConfigs<D = any>(configs: AxiosRequestConfig<D>): AxiosRequestConfig<D> {
+    if (!configs.headers) configs.headers = {};
+    configs.headers.access_token = this.access_token;
+    return configs;
+  }
+
+  protected async fetch<T = any, D = any>(configs: AxiosRequestConfig<D>) {
     const res = await this.instance<WechatRequestZip<T>, AxiosResponse<WechatRequestZip<T>, D>, D>(configs);
     const result = res.data;
     if (result.status !== 200) {
@@ -80,83 +94,15 @@ export class Request {
     await this.accessToken(code, state);
   }
 
-  public getTraceId() {
-    if (this.traceId >= Number.MAX_SAFE_INTEGER) {
-      this.traceId = 1;
-    } else {
-      this.traceId++;
-    }
-    return this.traceId;
-  }
-
-  private loadAccessToken() {
-    this.loading = true;
-    const promise = this.refresh_token ? this.refreshToken() : this.auto();
-    promise.then(() => {
-      this.loading = false;
-      for (const id of this.stacks.keys()) {
-        this.start(id);
-      }
-    }).catch(e => {
-      for (const { reject } of this.stacks.values()) {
-        reject(e);
-      }
-      this.stacks.clear();
-      this.loading = false;
-    })
-  }
-
-  private start(id: number) {
-    if (this.loading) return;
-    if (!this.access_token) {
-      this.loadAccessToken();
-    } else if (this.stacks.has(id)) {
-      const { configs, controller, resolve, reject } = this.stacks.get(id);
-      if (!configs.headers) configs.headers = {};
-      configs.headers.access_token = this.access_token;
-      configs.signal = controller.signal;
-      this.fetch(configs).then(res => {
-        this.stacks.delete(id);
-        resolve(res);
-      }).catch(e => {
-        if (e instanceof Exception) {
-          if (e.status === 410) {
-            for (const { controller } of this.stacks.values()) {
-              controller.abort();
-            }
-            this.loadAccessToken();
-          } else {
-            this.stacks.delete(id);
-            reject(e);
-          }
-        } else if (e?.code !== 'ERR_CANCELED') {
-          this.stacks.delete(id);
-          reject(e);
-        }
-      })
-    }
-  }
-
-  public use<T = any, D = any>(configs: AxiosRequestConfig<D> = {}): Promise<T> {
-    const id = this.getTraceId();
-    const controller = new AbortController();
-    return new Promise<T>((resolve, reject) => {
-      this.stacks.set(id, {
-        controller, configs, resolve, reject,
-      })
-      this.start(id);
-    })
-  }
-
   public get<T = any, D = any>(url: string, configs: WechatRequestForGetConfigs<D> = {}) {
-    return this.use<T, D>({
+    return this.add<T, D>({
       ...configs,
       method: 'get', url,
     })
   }
 
   public post<T = any, D = any>(url: string, data?: D, configs: WechatRequestForPostConfigs<D> = {}) {
-    return this.use<T, D>({
+    return this.add<T, D>({
       ...configs,
       method: 'post',
       url, data,
@@ -164,7 +110,7 @@ export class Request {
   }
 
   public put<T = any, D = any>(url: string, data?: D, configs: WechatRequestForPostConfigs<D> = {}) {
-    return this.use<T, D>({
+    return this.add<T, D>({
       ...configs,
       method: 'put',
       url, data,
@@ -172,7 +118,7 @@ export class Request {
   }
 
   public delete<T = any, D = any>(url: string, configs: WechatRequestForGetConfigs<D> = {}) {
-    return this.use<T, D>({
+    return this.add<T, D>({
       ...configs,
       method: 'delete', url,
     })

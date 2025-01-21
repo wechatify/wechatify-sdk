@@ -1,7 +1,7 @@
 {
-  "name": "wechat-platform-sdk",
+  "name": "wechatify-sdk",
   "version": "1.0.0",
-  "description": "PJBlog since 2014-preset, new Blog for writer",
+  "description": "sdk for wechatify",
   "private": true,
   "main": "dist/index.js",
   "type": "module",
