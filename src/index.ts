@@ -60,6 +60,7 @@ export class SDK extends EventEmitter {
       nickname?: string;
       avatar?: string;
       wxid?: string;
+      uuid?: string;
     }]>('/-/api/' + uuid);
   }
 
