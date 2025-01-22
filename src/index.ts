@@ -2,6 +2,7 @@ import { Request } from './request';
 import { EventEmitter } from 'node:events';
 import { Assistant } from './assistant';
 import { Promotion } from './promotion';
+import { ComPass } from './compass';
 import {
   IProxy,
   QRCODE_STATUS,
@@ -20,6 +21,7 @@ export class SDK extends EventEmitter {
   public readonly req: Request;
   public readonly assistant = new Assistant(this);
   public readonly promotion = new Promotion(this);
+  public readonly compass = new ComPass(this);
   constructor(options: WechatPlatformSDKProps) {
     super();
     this.setMaxListeners(+Infinity);

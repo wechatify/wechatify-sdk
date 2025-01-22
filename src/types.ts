@@ -131,3 +131,22 @@ export interface PromitionMembers {
   promotionCorporateUsers: PromotionMember[];
   acctStatus: number;
 }
+
+export interface ComPassMembers {
+  success: boolean,
+  talentList: { appid: string }[],
+  ecStoreInfoList: { appid: string }[],
+  finderList: {
+    identity: number,
+    nickname: string,
+    finderUsername: string,
+    headurl: string,
+    accountType: number
+  }[],
+}
+
+export enum COMPASS_BIZ_TYPE {
+  FINDER = 5,
+  TALENT = 9,
+  ECSTORE = 4,
+}

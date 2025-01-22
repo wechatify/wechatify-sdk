@@ -151,7 +151,7 @@ await sdk.assistant.scan(wxid, token, username);
 
 ## Promotion
 
-### 登录视屏好加热平台
+### 登录视屏号加热平台
 
 此能力具备两个功能，如果同一个用户登录请使用同一`token`，此处至关重要，请紧记。目前加热平台只能绑定一个账号，所以可以直接使用`scan`方法登录，而`members`方法可以辅助用于确认是否开通加热账号。
 
@@ -169,6 +169,32 @@ await sdk.promition.members(wxid, token);
 
 ```ts
 await sdk.promition.scan(wxid, token);
+```
+
+## ComPass
+
+### 登录视频号电商罗盘
+
+注意两个数据 `biz_id` 和 `biz_type`。
+
+- `biz_id` 来自列表的用户唯一编码
+- `biz_type` 编码的类型
+
+#### 获取当前微信号下可用的账号列表
+
+```ts
+await sdk.compass.members(wxid);
+```
+
+#### 模拟扫码登录
+
+```ts
+export enum COMPASS_BIZ_TYPE {
+  FINDER = 5, // 视频号
+  TALENT = 9, // 商户号
+  ECSTORE = 4, // 小店号
+}
+await sdk.compass.scan(wxid, biz_id, biz_type: COMPASS_BIZ_TYPE);
 ```
 
 # 最后
