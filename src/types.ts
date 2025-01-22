@@ -34,7 +34,7 @@ export type WechatRequestForGetConfigs<D> = Omit<AxiosRequestConfig<D>, 'method'
 export type WechatRequestForPostConfigs<D> = Omit<AxiosRequestConfig<D>, 'method' | 'url' | 'data'>;
 
 export interface WebHookEvents {
-  online: [number, string, WechatPersonalInfoCustomResponse, WechatLoginWithQrcodeCustomRequest],
+  online: [number, string, string, WechatPersonalInfoCustomResponse, WechatLoginWithQrcodeCustomRequest],
   offline: [number, string],
   proxy: [number, string, IProxy],
   forbiden: [number, string],
