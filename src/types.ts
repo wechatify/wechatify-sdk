@@ -84,7 +84,7 @@ export interface WechatReceiveMessage {
   payload: WebHookMessage<keyof WebHookEvents>[],
 }
 
-export declare enum QRCODE_STATUS {
+export enum QRCODE_STATUS {
   CREATED = "created",
   SCANED = "scaned",
   CANCELED = "canceled",
