@@ -90,7 +90,8 @@ export enum QRCODE_STATUS {
   CANCELED = "canceled",
   SUCCESS = "success",
   OUTDATED = "outdated",
-  UNKNOW = "unknow"
+  UNKNOW = "unknow",
+  ERROR = "error",
 }
 
 export interface WechatPersonalSafeItem {
