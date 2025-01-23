@@ -50,7 +50,7 @@ export class SDK extends EventEmitter {
   }
 
   public qrcode(data: WechatLoginWithQrcodeCustomRequest) {
-    return this.req.post<WechatLoginWithQrcodeCustomResponse, WechatLoginWithQrcodeCustomRequest>('/-/api/arcode', data);
+    return this.req.post<WechatLoginWithQrcodeCustomResponse, WechatLoginWithQrcodeCustomRequest>('/-/api/qrcode', data);
   }
 
   public checkLogin(uuid: string) {
