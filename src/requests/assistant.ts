@@ -12,9 +12,10 @@ interface AssistantResponse<T> {
 
 export class AssistantRequest extends NIO {
   private session: string;
+  private readonly reloadErrorCodes = [300334, 300330];
   constructor(
     private readonly wxid: string,
-    private readonly finder: string,
+    public readonly finder: string,
     private readonly assistant: Assistant,
   ) {
     super();
@@ -45,7 +46,7 @@ export class AssistantRequest extends NIO {
   }
 
   protected checkErrorCode(e: Exception): boolean {
-    return e?.status === 300330;
+    return this.reloadErrorCodes.includes(e?.status as number);
   }
 
   protected resolveConfigs<D = any>(configs: AxiosRequestConfig<D>): AxiosRequestConfig<D> {

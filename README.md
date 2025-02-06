@@ -149,6 +149,39 @@ await sdk.assistant.members(wxid, token);
 await sdk.assistant.scan(wxid, token, username);
 ```
 
+#### WEB 请求
+
+```ts
+// use(wxid: string, finder: string) => AssistantRequest
+// 获得一个可以操作的请求对象体req
+const req = this.sdk.instance.assistant.use('plmes3', 'v2_060000231003b20faec8c5e58d1ac2d0cc04ed35b0773e0dcaa981a2a9947a6ca3fe4c0b0d7d@finder');
+
+// 可以监听里面的 session 变化
+req.on('session', session => console.log('+', session));
+
+// 如果外部有持久化的对应的 session
+// 那么可以直接设置 session
+// 避免重复获取
+req.setSession('BgAAD6a3vLyFm5qGsY/Wy9zqeebeL1bMdLAF5FddymXtGbT3Opr3YBGIMhEhM/g2OFvd+bV0ZuDOw0hqEAd/RmGqc1NarIvhMnFJNrVMp58=');
+
+// 开始请求
+const res = await req.post(`/cgi-bin/mmfinderassistant-bin/post/post_list?_rid=${Date.now()}`, {
+  currentPage: 1,
+  pageSize: 5,
+  reqScene: 7,
+  scene: 7,
+  timestamp: Math.floor(Date.now() / 1000).toString(),
+  userpageType: 11,
+  _log_finder_id: req.finder,
+})
+console.log(res);
+```
+
+视频号助手所有接口都基于这个请求方式，所以，您可以自行通过该接口封装掉所需要的所有接口。
+
+> 注意： 这里建议 session 持久化缓存
+> 比如可以存储在 redis，初始化系统的时候使用`assistant.use(wxid, finder).setSession(value)`方法设置，以避免内部重复获取。
+
 ## Promotion
 
 ### 登录视屏号加热平台
