@@ -1,6 +1,6 @@
 {
   "name": "wechatify-sdk",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "sdk for wechatify",
   "main": "dist/index.js",
   "type": "module",

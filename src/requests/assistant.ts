@@ -12,13 +12,22 @@ interface AssistantResponse<T> {
 
 export class AssistantRequest extends NIO {
   private session: string;
-  private readonly reloadErrorCodes = [300334, 300330];
+  private readonly reloadErrorCodes: (number | ((v: number) => boolean))[] = [300334, 300330];
   constructor(
     private readonly wxid: string,
     public readonly finder: string,
     private readonly assistant: Assistant,
   ) {
     super();
+  }
+
+  public addCode(value: number | ((v: number) => boolean)) {
+    const index = this.reloadErrorCodes.indexOf(value);
+    if (index === -1) {
+      const i = this.reloadErrorCodes.push(value);
+      return () => this.reloadErrorCodes.splice(i, 1);
+    }
+    return () => this.reloadErrorCodes.splice(index, 1);
   }
 
   public setSession(value: string) {
@@ -46,7 +55,14 @@ export class AssistantRequest extends NIO {
   }
 
   protected checkErrorCode(e: Exception): boolean {
-    return this.reloadErrorCodes.includes(e?.status as number);
+    const code = (e?.status || 0) as number;
+    if (!code) return false;
+    return this.reloadErrorCodes.some((value) => {
+      if (typeof value === 'function') {
+        return value(code);
+      }
+      return value === code;
+    })
   }
 
   protected resolveConfigs<D = any>(configs: AxiosRequestConfig<D>): AxiosRequestConfig<D> {

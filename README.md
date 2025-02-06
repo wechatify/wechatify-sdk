@@ -182,6 +182,17 @@ console.log(res);
 > 注意： 这里建议 session 持久化缓存
 > 比如可以存储在 redis，初始化系统的时候使用`assistant.use(wxid, finder).setSession(value)`方法设置，以避免内部重复获取。
 
+如果助手自动重置 session 判断有瑕疵，那么您可以通过以下的方法来增加自动判断的能力。目前仅对`[300334, 300330]`这两个错误码进行识别判断。
+
+```ts
+// 添加一个重置码
+req.addCode(300339);
+
+// 或者通过函数判断
+// callback: (v: number) => boolean
+req.addCode(code => code > 300330 && code < 300340);
+```
+
 ## Promotion
 
 ### 登录视屏号加热平台
