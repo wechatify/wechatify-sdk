@@ -1,7 +1,8 @@
 import { AxiosRequestConfig } from "axios";
 import { Exception } from "./exception";
+import { EventEmitter } from 'node:events';
 
-export abstract class NIO {
+export abstract class NIO extends EventEmitter {
   private traceId = 0;
   private loading = false;
   protected readonly stacks = new Map<number, {
