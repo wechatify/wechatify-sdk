@@ -62,6 +62,7 @@ export abstract class NIO extends EventEmitter {
       this.loadPromise();
     } else if (this.stacks.has(id)) {
       const { configs, controller, resolve, reject } = this.stacks.get(id);
+      // 加入系统配置
       const _configs = this.resolveConfigs(configs);
       _configs.signal = controller.signal;
       this.fetch(_configs).then(res => {
@@ -70,8 +71,11 @@ export abstract class NIO extends EventEmitter {
       }).catch(e => {
         if (e instanceof Exception) {
           if (this.checkErrorCode(e)) {
-            for (const { controller } of this.stacks.values()) {
-              controller.abort();
+            for (const stack of this.stacks.values()) {
+              stack.controller.abort();
+              // 重新分配AbortController
+              // 下次执行时候不会出现 aborted: true
+              stack.controller = new AbortController();
             }
             this.loadPromise();
           } else {

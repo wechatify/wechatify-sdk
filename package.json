@@ -1,9 +1,12 @@
 {
   "name": "wechatify-sdk",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "sdk for wechatify",
   "main": "dist/index.js",
   "type": "module",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "pub": "npm run build && git add . && git commit -am 'update' && git push",
     "init": "pnpm i --registry=https://registry.npmmirror.com/",
