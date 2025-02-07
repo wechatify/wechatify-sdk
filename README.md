@@ -215,6 +215,49 @@ await sdk.promition.members(wxid, token);
 await sdk.promition.scan(wxid, token);
 ```
 
+#### WEB 请求
+
+```ts
+// use(wxid: string) => PromotionRequest
+// 获得一个可以操作的请求对象体req
+const req = this.sdk.instance.promotion.use('plmes3');
+
+// 可以监听里面的 session 变化
+req.on('session', session => console.log('+', session));
+
+// 如果外部有持久化的对应的 session
+// 那么可以直接设置 session
+// 避免重复获取
+req.setSession('BgAAD6a3vLyFm5qGsY/Wy9zqeebeL1bMdLAF5FddymXtGbT3Opr3YBGIMhEhM/g2OFvd+bV0ZuDOw0hqEAd/RmGqc1NarIvhMnFJNrVMp58=');
+
+// 开始请求
+const res = await req.post('/promote/api/web/transfer/MMFinderPromotionLiveDspApiSvr/searchLivePromotionOrderList?_rid=67a59cf4-985277x7&_vid=24c194e0-770c6ee', {
+  exportIds: [],
+  page: 1,
+  pageSize: 20,
+  sortField: 1,
+  sortOrder: 0,
+})
+console.log(res);
+```
+
+视频号加热所有接口都基于这个请求方式，所以，您可以自行通过该接口封装掉所需要的所有接口。
+
+> 注意： 这里建议 session 持久化缓存
+> 比如可以存储在 redis，初始化系统的时候使用`assistant.use(wxid).setSession(value)`方法设置，以避免内部重复获取。
+
+如果加热自动重置 session 判断有瑕疵，那么您可以通过以下的方法来增加自动判断的能力。目前仅对`[-330]`这个错误码进行识别判断。
+
+```ts
+// 添加一个重置码
+req.addCode(-400);
+
+// 或者通过函数判断
+// callback: (v: number) => boolean
+req.addCode(code => code > -500 && code < -200);
+```
+
+
 ## ComPass
 
 ### 登录视频号电商罗盘
