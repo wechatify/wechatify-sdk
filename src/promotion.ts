@@ -1,33 +1,16 @@
-import { AxiosRequestConfig } from "axios";
 import { SDK } from "./index";
-import { NIO } from "./nio";
 import { PromitionMembers } from './types';
-import { Exception } from './exception';
+import { PromotionRequest } from "./requests/promotion";
 
-export class Promotion extends NIO {
-  private session: string;
-  constructor(private readonly sdk: SDK) {
-    super();
-  }
+export class Promotion {
+  private readonly stacks = new Map<string, PromotionRequest>();
+  constructor(private readonly sdk: SDK) { }
 
-  protected initable(): boolean {
-    return !this.session;
-  }
-
-  protected usePromise(): Promise<void> {
-    return Promise.resolve()
-  }
-
-  protected fetch<T = any, D = any>(configs: AxiosRequestConfig<D>): Promise<T> {
-    return Promise.resolve(null)
-  }
-
-  protected checkErrorCode(e: Exception): boolean {
-    return e?.status === 410;
-  }
-
-  protected resolveConfigs<D = any>(configs: AxiosRequestConfig<D>): AxiosRequestConfig<D> {
-    return configs;
+  public use(wxid: string) {
+    if (!this.stacks.has(wxid)) {
+      this.stacks.set(wxid, new PromotionRequest(wxid, this));
+    }
+    return this.stacks.get(wxid);
   }
 
   public members(wxid: string, token: string) {
