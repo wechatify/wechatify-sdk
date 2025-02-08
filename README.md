@@ -125,6 +125,23 @@ await sdk.updateProxy(wxid, {
 await sdk.deleteProxy(wxid);
 ```
 
+## Wechat Sync
+
+微信信息同步
+
+### 同步单个微信信息
+
+```ts
+await sdk.Wechat.info(wxid);
+```
+
+### 同步微信列表
+
+```ts
+await sdk.Wechat.entries(page = 1, size = 10);
+```
+
+
 ## Assistant
 
 视频号助手接口。

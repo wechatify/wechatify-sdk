@@ -151,3 +151,26 @@ export enum COMPASS_BIZ_TYPE {
   TALENT = 9,
   ECSTORE = 4,
 }
+
+export enum WECHAT_STATUS {
+  FORBIDEN,
+  OFFLINE,
+  ONLINE,
+}
+
+export interface IWechat {
+  id: number;
+  wxid: string;
+  nickname: string;
+  email: string;
+  mobile: string;
+  uin: string;
+  sex: number;
+  signature: string;
+  country: string;
+  province: string;
+  city: string;
+  avatar: string;
+  status: WECHAT_STATUS;
+  last_login_time: Date | string;
+}

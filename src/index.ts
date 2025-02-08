@@ -13,6 +13,7 @@ import {
   WechatPlatformSDKProps,
   WechatReceiveMessage,
 } from './types';
+import { Wechat } from './wechat';
 
 export * from './exception';
 export * from './types';
@@ -22,6 +23,7 @@ export class SDK extends EventEmitter {
   public readonly assistant = new Assistant(this);
   public readonly promotion = new Promotion(this);
   public readonly compass = new ComPass(this);
+  public readonly Wechat = new Wechat(this);
   constructor(options: WechatPlatformSDKProps) {
     super();
     this.setMaxListeners(+Infinity);
