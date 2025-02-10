@@ -14,6 +14,8 @@ import {
   WechatReceiveMessage,
 } from './types';
 import { Wechat } from './wechat';
+import { Finder } from './finder';
+import { Live } from './live';
 
 export * from './exception';
 export * from './types';
@@ -24,6 +26,8 @@ export class SDK extends EventEmitter {
   public readonly promotion = new Promotion(this);
   public readonly compass = new ComPass(this);
   public readonly Wechat = new Wechat(this);
+  public readonly Finder = new Finder(this);
+  public readonly Live = new Live(this);
   constructor(options: WechatPlatformSDKProps) {
     super();
     this.setMaxListeners(+Infinity);
