@@ -8,12 +8,24 @@ import {
 export class MP {
   constructor(private readonly sdk: SDK) { }
 
+  /**
+   * 换取小程序登录 code
+   * @param wxid 
+   * @param appid 
+   * @returns 
+   */
   public code(wxid: string, appid: string) {
     return this.sdk.req.postWithWxid<WechatMPCodeCustomResponse>(wxid, '/-/api/mp/code', {
       appid
     });
   }
 
+  /**
+   * 通过 code 获取小程序数据
+   * @param wxid 
+   * @param options 
+   * @returns 
+   */
   public data(wxid: string, options: {
     appid: string,
     data: object | string,
