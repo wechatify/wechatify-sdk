@@ -171,7 +171,7 @@ await sdk.assistant.scan(wxid, token, username);
 ```ts
 // use(wxid: string, finder: string) => AssistantRequest
 // 获得一个可以操作的请求对象体req
-const req = this.sdk.instance.assistant.use('plmes3', 'v2_060000231003b20faec8c5e58d1ac2d0cc04ed35b0773e0dcaa981a2a9947a6ca3fe4c0b0d7d@finder');
+const req = sdk.instance.assistant.use('plmes3', 'v2_060000231003b20faec8c5e58d1ac2d0cc04ed35b0773e0dcaa981a2a9947a6ca3fe4c0b0d7d@finder');
 
 // 可以监听里面的 session 变化
 req.on('session', session => console.log('+', session));
@@ -183,8 +183,8 @@ req.on('session', session => console.log('+', session));
 // 直到 session 失效
 req.on('disconnect', () => {
   // 失效处理
-  // req.wxid
-  // req.finder
+  req.clean(); // 停止所有请求，同时所有请求报 414 错误
+  sdk.instance.assistant.delete(req.wxid, req.finder); // 请求对象缓存
 })
 
 // 如果外部有持久化的对应的 session
@@ -208,7 +208,7 @@ console.log(res);
 req.clean();
 
 // 删除请求缓存
-this.sdk.instance.assistant.delete('plmes3', 'v2_060000231003b20faec8c5e58d1ac2d0cc04ed35b0773e0dcaa981a2a9947a6ca3fe4c0b0d7d@finder');
+sdk.instance.assistant.delete(req.wxid, req.finder);
 ```
 
 视频号助手所有接口都基于这个请求方式，所以，您可以自行通过该接口封装掉所需要的所有接口。
