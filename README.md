@@ -176,6 +176,17 @@ const req = this.sdk.instance.assistant.use('plmes3', 'v2_060000231003b20faec8c5
 // 可以监听里面的 session 变化
 req.on('session', session => console.log('+', session));
 
+// 当被解绑时候的事件
+// 注意：在解绑前如果已经获取到 session
+// 那么不论是否已经被解绑
+// 这个 session 在有效期内都能获取到数据
+// 直到 session 失效
+req.on('disconnect', () => {
+  // 失效处理
+  // req.wxid
+  // req.finder
+})
+
 // 如果外部有持久化的对应的 session
 // 那么可以直接设置 session
 // 避免重复获取
@@ -203,11 +214,15 @@ console.log(res);
 
 ```ts
 // 添加一个重置码
-req.addCode(300339);
+const remove = req.addCode(300339);
+// 移除这个 code
+remove();
 
 // 或者通过函数判断
 // callback: (v: number) => boolean
-req.addCode(code => code > 300330 && code < 300340);
+const remove = req.addCode(code => code > 300330 && code < 300340);
+// 移除这个判断
+remove();
 ```
 
 ## Promotion

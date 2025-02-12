@@ -14,7 +14,7 @@ export class AssistantRequest extends NIO {
   private session: string;
   private readonly reloadErrorCodes: (number | ((v: number) => boolean))[] = [300334, 300330];
   constructor(
-    private readonly wxid: string,
+    public readonly wxid: string,
     public readonly finder: string,
     private readonly assistant: Assistant,
   ) {
@@ -49,6 +49,10 @@ export class AssistantRequest extends NIO {
     const res = await axios<AssistantResponse<T>>(configs);
     const data = res.data;
     if (data.errCode !== 0) {
+      switch (data.errCode) {
+        // 不是绑定的运营者
+        case 300504: this.emit('disconnect'); break;
+      }
       throw new Exception(data.errCode, data.errMsg);
     }
     return data.data;
