@@ -40,9 +40,19 @@ export class AssistantRequest extends NIO {
   }
 
   protected async usePromise() {
-    const res = await this.assistant.scan(this.wxid, Date.now().toString(), this.finder);
-    this.session = res;
-    this.emit('session', res);
+    try {
+      const res = await this.assistant.scan(this.wxid, Date.now().toString(), this.finder);
+      this.session = res;
+      this.emit('session', res);
+    } catch (e) {
+      if (e instanceof Exception) {
+        switch (e.status) {
+          // 不是绑定的运营者
+          case 300504: this.emit('disconnect'); break;
+        }
+      }
+      throw e;
+    }
   }
 
   protected async fetch<T = any, D = any>(configs: AxiosRequestConfig<D>): Promise<T> {
