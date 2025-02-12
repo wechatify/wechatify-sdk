@@ -203,6 +203,12 @@ const res = await req.post(`/cgi-bin/mmfinderassistant-bin/post/post_list?_rid=$
   _log_finder_id: req.finder,
 })
 console.log(res);
+
+// 停止所有请求
+req.clean();
+
+// 删除请求缓存
+this.sdk.instance.assistant.delete('plmes3', 'v2_060000231003b20faec8c5e58d1ac2d0cc04ed35b0773e0dcaa981a2a9947a6ca3fe4c0b0d7d@finder');
 ```
 
 视频号助手所有接口都基于这个请求方式，所以，您可以自行通过该接口封装掉所需要的所有接口。
@@ -271,6 +277,12 @@ const res = await req.post('/promote/api/web/transfer/MMFinderPromotionLiveDspAp
   sortOrder: 0,
 })
 console.log(res);
+
+// 停止所有请求
+req.clean();
+
+// 删除请求缓存
+this.sdk.instance.promotion.delete('plmes3');
 ```
 
 视频号加热所有接口都基于这个请求方式，所以，您可以自行通过该接口封装掉所需要的所有接口。
