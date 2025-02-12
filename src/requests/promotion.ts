@@ -21,6 +21,10 @@ export class PromotionRequest extends NIO {
     super();
   }
 
+  public clean() {
+    this.clear(new Exception(414));
+  }
+
   public addCode(value: number | ((v: number) => boolean)) {
     const index = this.reloadErrorCodes.indexOf(value);
     if (index === -1) {

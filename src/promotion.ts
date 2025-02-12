@@ -13,6 +13,16 @@ export class Promotion {
     return this.stacks.get(wxid);
   }
 
+  public delete(wxid: string) {
+    if (this.stacks.has(wxid)) {
+      const wx = this.stacks.get(wxid);
+      wx.clean();
+      wx.delete(wxid);
+    }
+    return this;
+  }
+
+
   public members(wxid: string, token: string) {
     return this.sdk.req.getWithWxid<PromitionMembers>(wxid, `/-/api/promotion/${token}/members`);
   }

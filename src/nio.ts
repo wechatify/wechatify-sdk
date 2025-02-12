@@ -12,6 +12,13 @@ export abstract class NIO extends EventEmitter {
     reject: Function,
   }>();
 
+  protected clear(e: any) {
+    for (const { controller, reject } of this.stacks.values()) {
+      controller.abort();
+      reject(e);
+    }
+  }
+
   protected abstract initable(): boolean;
   protected abstract usePromise(): Promise<void>;
   protected abstract fetch<T = any, D = any>(configs: AxiosRequestConfig<D>): Promise<T>;

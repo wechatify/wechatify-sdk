@@ -17,6 +17,18 @@ export class Assistant {
     return wx.get(finder);
   }
 
+  public delete(wxid: string, finder: string) {
+    if (this.stacks.has(wxid)) {
+      const wx = this.stacks.get(wxid);
+      if (wx.has(finder)) {
+        const cur = wx.get(finder);
+        cur.clean();
+        wx.delete(finder);
+      }
+    }
+    return this;
+  }
+
   public members(wxid: string, token: string) {
     return this.sdk.req.getWithWxid<AssistantResponseMember[]>(wxid, `/-/api/assistant/${token}/members`);
   }
