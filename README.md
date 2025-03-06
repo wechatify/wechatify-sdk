@@ -8,6 +8,32 @@
 4. 视频号加热平台自动扫码登录
 5. 视频号电商罗盘平台自动扫码登录
 
+## 功能特点
+
+- 完整的 TypeScript 类型支持
+- 基于事件驱动的消息处理机制
+- 支持微信登录、消息接收、账号管理等功能
+- 支持视频号、直播、公众号等微信生态功能
+- 支持代理配置
+- 支持安全检测
+- 支持多账号管理
+- 支持自动重连机制
+- 支持自定义错误处理
+- 支持完整的日志记录
+
+## 系统要求
+
+- Node.js >= 14
+- TypeScript >= 4.0
+- 支持 ESM 模块系统
+- 支持代理服务器（可选）
+
+## 开发环境
+
+- pnpm (推荐包管理器)
+- TypeScript
+- 支持 ESM 的编辑器（如 VSCode）
+
 ## Install
 
 ```bash
@@ -27,6 +53,38 @@ const sdk = new SDK({
 
 - `app_id`和`app_secret`都是从平台获取，通过`发送密钥`到邮箱的方式获得，您也可以通过联系管理员获得试用。
 - `host`必须指定我们预定的服务地址
+
+## 最佳实践
+
+1. 错误处理
+```typescript
+try {
+  await sdk.qrcode({...});
+} catch (error) {
+  console.error('获取二维码失败:', error);
+}
+```
+
+2. 事件监听
+```typescript
+sdk.on('online', (timestamp, wxid, nickname) => {
+  console.log(`账号 ${nickname}(${wxid}) 上线`);
+});
+
+sdk.on('offline', (timestamp, wxid) => {
+  console.log(`账号 ${wxid} 下线`);
+});
+```
+
+3. 代理配置
+```typescript
+const proxy = {
+  address: '127.0.0.1',
+  username: 'user',
+  password: 'pass'
+};
+await sdk.updateProxy(wxid, proxy);
+```
 
 ## Listen & Receive Messages
 
@@ -328,6 +386,70 @@ export enum COMPASS_BIZ_TYPE {
 await sdk.compass.scan(wxid, biz_id, biz_type: COMPASS_BIZ_TYPE);
 ```
 
+## 常见问题
+
+1. 登录失败
+   - 检查网络连接
+   - 验证代理配置
+   - 确认账号状态
+
+2. Session 失效
+   - 检查 token 是否正确
+   - 确认账号权限
+   - 查看错误日志
+
+3. 请求超时
+   - 检查网络状况
+   - 调整超时设置
+   - 使用代理服务器
+
+## 调试指南
+
+1. 开启调试日志
+```typescript
+const sdk = new SDK({
+  app_id: 'xxxxxx',
+  app_secret: 'xxxxxxxxx',
+  host: 'https://wechat.example.com',
+  debug: true  // 开启调试模式
+});
+```
+
+2. 错误追踪
+```typescript
+sdk.on('error', (error) => {
+  console.error('SDK错误:', error);
+});
+```
+
+3. 性能监控
+```typescript
+sdk.on('request', (request) => {
+  console.log('请求信息:', request);
+});
+```
+
 # 最后
 
 如有问题，请`issue`联系我！
+
+## 贡献指南
+
+欢迎提交 Pull Request 或创建 Issue。在提交代码前，请确保：
+
+1. 代码符合 TypeScript 规范
+2. 添加了必要的测试
+3. 更新了相关文档
+4. 遵循现有的代码风格
+
+## 更新日志
+
+### v1.0.16
+- 优化了错误处理机制
+- 改进了代理配置功能
+- 增强了类型定义
+
+### v1.0.15
+- 添加了新的 API 接口
+- 修复了已知问题
+- 提升了性能表现
