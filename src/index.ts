@@ -68,7 +68,13 @@ export class SDK extends EventEmitter {
       wxid?: string;
       uuid?: string;
       message?: string,
+      ticket?: string,
     }]>('/-/api/' + uuid);
+  }
+
+  // 提交异常登录安全码
+  public submitAbnormalLoginSecurityCode(ticket: string, pin: string) {
+    return this.req.post<number>(`/-/api/${ticket}/abnormal-login-security-code`, { pin });
   }
 
   public logout(wxid: string) {

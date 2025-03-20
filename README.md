@@ -139,6 +139,17 @@ if (res) {
 }
 ```
 
+当`status === 1`也就是`status === QRCODE_STATUS.SCANED`的时候，同时存在`meta.ticket`表示需要异常登录安全码。
+你需要显示一个 input 框让用户提交这个验证码。验证码的验证方法如下：
+
+```ts
+const res = await sdk.submitAbnormalLoginSecurityCode(meta.ticket, pincode);
+// ticket required
+// pincode requried
+```
+
+当你提交这个验证码后，那么检查登录结果的状态也会随之改变。
+
 ## Logout
 
 退出登录
