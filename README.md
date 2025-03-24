@@ -113,8 +113,11 @@ http.post('/xxxxxxx', ctx => {
 
 ```ts
 const { base64, uuid } = await sdk.qrcode({
-  deviceId: '随机字符串';
-  deviceName: '随机字符串';
+  deviceId: '随机字符串',
+  deviceName: '随机字符串',
+  // type类型'iPad' | 'windows' | 'mac' | 'QQBrowser' | 'android' | 'android-pad'
+  // 可以选择 `android-pad` 表示安卓 pad 端登录
+  type: 'iPad',
   proxy?: {
     address: 'IP地址',
     username: '账号',

@@ -69,9 +69,12 @@ export interface WechatPersonalInfoCustomResponse {
   walletRegion: number;
 }
 
+export type WechatLoginModelType = 'iPad' | 'windows' | 'mac' | 'QQBrowser' | 'android' | 'android-pad';
+
 export interface WechatLoginWithQrcodeCustomRequest {
   deviceId: string;
   deviceName: string;
+  type?: WechatLoginModelType,
   proxy?: IProxy;
 }
 
