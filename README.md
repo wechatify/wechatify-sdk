@@ -129,6 +129,30 @@ const { base64, uuid } = await sdk.qrcode({
 - `base64` 将用于用户的图片显示
 - `uuid` 用于结果查询
 
+## Proxy
+
+代理支持静态代理和动态代理，推荐使用静态代理
+
+如果你需要使用动态代理，需要自己启动一个服务来转换，并且返回固定的格式
+
+比如
+
+```js
+const axios = require('axios');
+const http = require('http');
+
+http.createServer((req, res) => {
+  axios.get('https://share.proxy.qg.net/get?key=xxx&pwd=xxx').then(result => {
+    const list = result.data.data;
+    // 至于怎么返回内容你们自己定
+    // 但是返回结果为字符串
+    res.end(list[0].server)
+  })
+}).listen(9012)
+```
+
+请求返回的字符串将替换`proxy.address`字符串，打到动态的效果。
+
 ## Check Login Result
 
 检查登录结果
