@@ -153,6 +153,23 @@ http.createServer((req, res) => {
 
 请求返回的字符串将替换`proxy.address`字符串，打到动态的效果。
 
+填入的内容变为
+
+```ts
+const { base64, uuid } = await sdk.qrcode({
+  deviceId: '随机字符串',
+  deviceName: '随机字符串',
+  // type类型'iPad' | 'windows' | 'mac' | 'QQBrowser' | 'android' | 'android-pad'
+  // 可以选择 `android-pad` 表示安卓 pad 端登录
+  type: 'iPad',
+  proxy?: {
+    address: 'http://127.0.0.1:9012',
+    username: '账号',
+    password: '密码'
+  };
+})
+```
+
 ## Check Login Result
 
 检查登录结果
