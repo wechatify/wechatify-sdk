@@ -28,6 +28,7 @@ export interface IProxy {
   address: string;
   username: string;
   password: string;
+  ishttp?: boolean;
 }
 
 export type WechatRequestForGetConfigs<D> = Omit<AxiosRequestConfig<D>, 'method' | 'url'>;

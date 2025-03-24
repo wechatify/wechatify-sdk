@@ -151,7 +151,7 @@ http.createServer((req, res) => {
 }).listen(9012)
 ```
 
-请求返回的字符串将替换`proxy.address`字符串，打到动态的效果。
+请求返回的字符串将替换`proxy.address`字符串，达到动态的效果。
 
 填入的内容变为
 
@@ -165,7 +165,10 @@ const { base64, uuid } = await sdk.qrcode({
   proxy?: {
     address: 'http://127.0.0.1:9012',
     username: '账号',
-    password: '密码'
+    password: '密码',
+    // 如果你的动态代理提取的 ip 是 http 的，
+    // 那么请设置这个参数为 true
+    ishttp: true 
   };
 })
 ```
