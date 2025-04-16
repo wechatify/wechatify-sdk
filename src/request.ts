@@ -26,7 +26,7 @@ export class Request extends NIO {
 
   protected usePromise(): Promise<void> {
     return this.refresh_token
-      ? this.refreshToken()
+      ? this.refreshToken().catch(e => this.auto())
       : this.auto();
   }
 
